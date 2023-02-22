@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Image Upload Form</title>
+        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+        <script type="text/javascript">
+            function submitForm() {
+                // var jform = new FormData(document.getElementById("fileinfo"));
+                var jform = new FormData();
+                jform.append("label", "WEBUPLOAD");
+                jform.append('text', $('#text').val());
+                jform.append('file', $('#file').get(0).files[0]); // Here's the important bit
+
+                $.ajax({
+                    url: "upload.php",
+                    type: 'POST',
+                    data: jform,
+                    dataType: 'json',
+                    mimeType: 'multipart/form-data', // this too
+                    contentType: false,
+                    // cache: false,
+                    processData: false,
+                    success: function (data, status, jqXHR) {
+                        alert('Hooray! All is well.');
+                        console.log(data);
+                        console.log(status);
+                        console.log(jqXHR);
+
+                    },
+                    error: function (jqXHR, status, error) {
+                        // Hopefully we should never reach here
+                        console.log(jqXHR);
+                        console.log(status);
+                        console.log(error);
+                    }
+                });
+                return false;
+            }
+        </script>
+    </head>
+
+    <body>
+        <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+            <label>Select a file:</label><br>
+            <input type="text" id="text" name="text" required />
+            <input type="file" id="file" name="file" required />
+            <input type="submit" value="Upload" />
+        </form>
+        <div id="output"></div>
+    </body>
+
+</html>
